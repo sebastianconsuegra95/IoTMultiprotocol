@@ -1,0 +1,44 @@
+{
+    "name": "mqttmodule",
+    "version": "0.0.2",
+    "description": "Azure IoT Edge Node.js module sample project",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Azure/generator-azure-iot-edge-module"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "azure-iot-device": "^1.17.4",
+        "azure-iot-device-mqtt": "^1.15.4",
+        "mqtt": "^4.3.7"
+    },
+    "devDependencies": {
+        "jest": "^29.0.2",
+        "jest-sonar-reporter": "^2.0.0",
+        "sonarqube-scanner": "^2.8.1"
+    },
+    "scripts": {
+        "test": "jest --forceExit --coverage"
+    },
+    "jest": {
+        "setupFiles": [
+            "<rootDir>/jest/setEnvVars.js"
+          ],
+        "moduleFileExtensions": [
+            "js",
+            "json",
+            "ts"
+        ],
+        "coverageDirectory": "./coverage",
+        "testEnvironment": "node",
+        "coveragePathIgnorePatterns": [
+            "/node_modules/"
+        ],
+        "testResultsProcessor": "jest-sonar-reporter"
+    },
+    "jestSonar": {
+        "reportPath": "coverage",
+        "reportFile": "test-reporter.xml",
+        "indent": 4
+    }
+}
