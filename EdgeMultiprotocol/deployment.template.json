@@ -43,6 +43,11 @@
                       {
                         "HostPort": "443"
                       }
+                    ],
+                    "1881/tcp": [
+                      {
+                        "HostPort": "1881"
+                      }
                     ]
                   }
                 }
@@ -69,6 +74,11 @@
             "settings": {
               "image": "${MODULES.MQTTModule}",
               "createOptions": {}
+            },
+            "env": {
+              "BrokerIpAdress": {
+                "value": "10.250.9.132"
+              }
             }
           }
         }
