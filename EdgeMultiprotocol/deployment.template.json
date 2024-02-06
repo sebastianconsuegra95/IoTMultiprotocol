@@ -60,6 +60,16 @@
               "image": "${MODULES.SampleModule}",
               "createOptions": {}
             }
+          },
+          "MQTTModule": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.MQTTModule}",
+              "createOptions": {}
+            }
           }
         }
       }
@@ -68,7 +78,8 @@
       "properties.desired": {
         "schemaVersion": "1.4",
         "routes": {
-          "SampleModuleToIoTHub": "FROM /messages/modules/SampleModule/outputs/* INTO $upstream"
+          "SampleModuleToIoTHub": "FROM /messages/modules/SampleModule/outputs/* INTO $upstream",
+          "MQTTModuleToIoTHub": "FROM /messages/modules/MQTTModule/outputs/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
