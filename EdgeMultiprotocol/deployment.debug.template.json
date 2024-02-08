@@ -60,13 +60,13 @@
               "image": "${MODULES.SampleModule.debug}",
               "createOptions": {
                 "ExposedPorts": {
-                  "5678/tcp": {}
+                  "9229/tcp": {}
                 },
                 "HostConfig": {
                   "PortBindings": {
-                    "5678/tcp": [
+                    "9229/tcp": [
                       {
-                        "HostPort": "5678"
+                        "HostPort": "9229"
                       }
                     ]
                   }
@@ -96,6 +96,16 @@
                 }
               }
             }
+          },
+          "SimulatedTemperatureSensor": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:latest",
+              "createOptions": {}
+            }
           }
         }
       }
@@ -105,11 +115,18 @@
         "schemaVersion": "1.4",
         "routes": {
           "SampleModuleToIoTHub": "FROM /messages/modules/SampleModule/outputs/* INTO $upstream",
-          "MQTTModuleToIoTHub": "FROM /messages/modules/MQTTModule/outputs/* INTO $upstream"
+          "MQTTModuleToIoTHub": "FROM /messages/modules/MQTTModule/outputs/* INTO $upstream",
+          "SimulatedTemperatureSensorToIoTHub": "FROM /messages/modules/SimulatedTemperatureSensor/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
         }
+      }
+    },
+    "SimulatedTemperatureSensor": {
+      "properties.desired": {
+        "SendData": true,
+        "SendInterval": 5
       }
     }
   }
