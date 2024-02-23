@@ -3,13 +3,19 @@
   "modulesContent": {
     "$edgeAgent": {
       "properties.desired": {
-        "schemaVersion": "1.1",
+        "schemaVersion": "1.4",
         "runtime": {
           "type": "docker",
           "settings": {
             "minDockerVersion": "v1.25",
             "loggingOptions": "",
-            "registryCredentials": {}
+            "registryCredentials": {
+              "docker": {
+                "username": "$CONTAINER_REGISTRY_USERNAME_docker",
+                "password": "$CONTAINER_REGISTRY_PASSWORD_docker",
+                "address": "docker.io"
+              }
+            }
           }
         },
         "systemModules": {
@@ -65,15 +71,26 @@
               "image": "mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:latest",
               "createOptions": {}
             }
+          },
+          "SampleModule": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.SampleModule}",
+              "createOptions": {}
+            }
           }
         }
       }
     },
     "$edgeHub": {
       "properties.desired": {
-        "schemaVersion": "1.2",
+        "schemaVersion": "1.4",
         "routes": {
-          "SimulatedTemperatureSensorToIoTHub": "FROM /messages/modules/SimulatedTemperatureSensor/* INTO $upstream"
+          "SimulatedTemperatureSensorToIoTHub": "FROM /messages/modules/SimulatedTemperatureSensor/outputs/temperatureOutput INTO BrokeredEndpoint(\"/modules/SampleModule/inputs/input1\")",
+          "SampleModuleToIoTHub": "FROM /messages/modules/SampleModule/outputs/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
