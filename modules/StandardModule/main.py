@@ -28,8 +28,8 @@ def create_client():
             print("forwarding mesage to output1")
 
 
-
-            # Logica del modulo de transformación
+            
+            # Logica del modulo de estandarización
 
 
 
