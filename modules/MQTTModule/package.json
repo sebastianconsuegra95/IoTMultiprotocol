@@ -1,5 +1,5 @@
 {
-    "name": "samplemodule",
+    "name": "mqttmodule",
     "version": "0.0.1",
     "description": "Azure IoT Edge Node.js module sample project",
     "repository": {
@@ -9,6 +9,8 @@
     "license": "MIT",
     "dependencies": {
         "azure-iot-device": "^1.17.4",
-        "azure-iot-device-mqtt": "^1.15.4"
+        "azure-iot-device-mqtt": "^1.15.4",
+        "globalthis": "^1.0.3",
+        "mqtt": "^5.3.6"
     }
 }
