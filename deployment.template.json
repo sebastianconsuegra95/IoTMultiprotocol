@@ -81,6 +81,16 @@
               "image": "${MODULES.MQTTModule}",
               "createOptions": {}
             }
+          },
+          "TransformModule": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.TransformModule}",
+              "createOptions": {}
+            }
           }
         }
       }
@@ -90,7 +100,8 @@
         "schemaVersion": "1.4",
         "routes": {
           "SimulatedTemperatureSensorToIoTHub": "FROM /messages/modules/SimulatedTemperatureSensor/outputs/temperatureOutput INTO BrokeredEndpoint(\"/modules/MQTTModule/inputs/input1\")",
-          "MQTTModuleToIoTHub": "FROM /messages/modules/MQTTModule/outputs/* INTO $upstream"
+          "MQTTModuleToIoTHub": "FROM /messages/modules/MQTTModule/outputs/* INTO $upstream",
+          "TransformModuleToIoTHub": "FROM /messages/modules/TransformModule/outputs/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
