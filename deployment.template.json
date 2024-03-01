@@ -109,10 +109,10 @@
       "properties.desired": {
         "schemaVersion": "1.4",
         "routes": {
-          "SimulatedTemperatureSensorToIoTHub": "FROM /messages/modules/SimulatedTemperatureSensor/outputs/temperatureOutput INTO BrokeredEndpoint(\"/modules/MQTTModule/inputs/input1\")",
-          "MQTTModuleToIoTHub": "FROM /messages/modules/MQTTModule/outputs/* INTO $upstream",
+          "SimulatedTemperatureSensorToMQTTModule": "FROM /messages/modules/SimulatedTemperatureSensor/outputs/temperatureOutput INTO BrokeredEndpoint(\"/modules/MQTTModule/inputs/input1\")",
+          "MQTTModuleToStandardModule": "FROM /messages/modules/MQTTModule/outputs/* INTO BrokeredEndpoint(\"/modules/StandardModule/inputs/input1\")",
           "TransformModuleToIoTHub": "FROM /messages/modules/TransformModule/outputs/* INTO $upstream",
-          "StandardModuleToIoTHub": "FROM /messages/modules/StandardModule/outputs/* INTO $upstream"
+          "StandardModuleToTransformModule": "FROM /messages/modules/StandardModule/outputs/* INTO BrokeredEndpoint(\"/modules/TransformModule/inputs/input1\")"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
