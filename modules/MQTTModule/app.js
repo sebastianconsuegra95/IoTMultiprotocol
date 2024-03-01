@@ -4,7 +4,6 @@ var Transport = require('azure-iot-device-mqtt').Mqtt;
 var Client = require('azure-iot-device').ModuleClient;
 var Message = require('azure-iot-device').Message;
 var mqtt = require('mqtt')
-require('globalthis')
 
 Client.fromEnvironment(Transport, function (err, client) {
   if (err) {
