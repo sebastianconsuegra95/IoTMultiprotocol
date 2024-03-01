@@ -80,6 +80,11 @@
             "settings": {
               "image": "${MODULES.MQTTModule}",
               "createOptions": {}
+            },
+            "env": {
+              "brokerIpAdress": {
+                "value": "172.200.71.51"
+              }
             }
           },
           "TransformModule": {
