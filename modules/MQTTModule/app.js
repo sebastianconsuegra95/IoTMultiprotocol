@@ -6,7 +6,7 @@ var Message = require('azure-iot-device').Message;
 var Mqtt = require('mqtt');
 
 var ClientMqtt = Mqtt.connect('http://' + process.env.brokerIpAdress + ':1881');
-var Topics = ['prueba']
+var Topics = ['client/data']
 var MQTT_Topics = Topics
 
 ClientMqtt.on('connect', function () {
