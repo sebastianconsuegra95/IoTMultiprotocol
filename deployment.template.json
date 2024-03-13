@@ -116,7 +116,7 @@
         "routes": {
           "SimulatedTemperatureSensorToMQTTModule": "FROM /messages/modules/SimulatedTemperatureSensor/outputs/temperatureOutput INTO BrokeredEndpoint(\"/modules/MQTTModule/inputs/input1\")",
           "MQTTModuleToStandardModule": "FROM /messages/modules/MQTTModule/outputs/* INTO BrokeredEndpoint(\"/modules/StandardModule/inputs/input1\")",
-          "TransformModuleToIoTHub": "FROM /messages/modules/TransformModule/outputs/* INTO $upstream",
+          "TransformModuleToIoTHub": "FROM /messages/modules/TransformModule/outputs/* INTO $upstreamecia",
           "StandardModuleToTransformModule": "FROM /messages/modules/StandardModule/outputs/* INTO BrokeredEndpoint(\"/modules/TransformModule/inputs/input1\")"
         },
         "storeAndForwardConfiguration": {
@@ -126,7 +126,7 @@
     },
     "SimulatedTemperatureSensor": {
       "properties.desired": {
-        "SendData": true,
+        "SendData": false,
         "SendInterval": 5
       }
     }
