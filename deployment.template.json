@@ -33,6 +33,9 @@
             "settings": {
               "image": "mcr.microsoft.com/azureiotedge-hub:1.4",
               "createOptions": {
+                "ExposedPorts": {
+                  "1881/tcp": {}
+                },
                 "HostConfig": {
                   "PortBindings": {
                     "5671/tcp": [
@@ -48,11 +51,6 @@
                     "443/tcp": [
                       {
                         "HostPort": "443"
-                      }
-                    ],
-                    "1881/tcp": [
-                      {
-                        "HostPort": "1881"
                       }
                     ]
                   }
@@ -84,6 +82,9 @@
             "env": {
               "brokerIpAdress": {
                 "value": "172.200.71.51"
+              },
+              "topics": {
+                "value": "micasa/mqtt/data"
               }
             }
           },
@@ -106,6 +107,16 @@
               "image": "${MODULES.StandardModule}",
               "createOptions": {}
             }
+          },
+          "ModbusModule": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "mcr.microsoft.com/azureiotedge/modbus:latest",
+              "createOptions": {}
+            }
           }
         }
       }
@@ -116,8 +127,9 @@
         "routes": {
           "SimulatedTemperatureSensorToMQTTModule": "FROM /messages/modules/SimulatedTemperatureSensor/outputs/temperatureOutput INTO BrokeredEndpoint(\"/modules/MQTTModule/inputs/input1\")",
           "MQTTModuleToStandardModule": "FROM /messages/modules/MQTTModule/outputs/* INTO BrokeredEndpoint(\"/modules/StandardModule/inputs/input1\")",
-          "TransformModuleToIoTHub": "FROM /messages/modules/TransformModule/outputs/* INTO $upstreamecia",
-          "StandardModuleToTransformModule": "FROM /messages/modules/StandardModule/outputs/* INTO BrokeredEndpoint(\"/modules/TransformModule/inputs/input1\")"
+          "StandardModuleToTransformModule": "FROM /messages/modules/StandardModule/outputs/* INTO BrokeredEndpoint(\"/modules/TransformModule/inputs/input1\")",
+          "TransformModuleToIoTHub": "FROM /messages/modules/TransformModule/outputs/* INTO $upstream",
+          "ModbusModuleToIoTHub": "FROM /messages/modules/ModbusModule/outputs/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
@@ -128,6 +140,37 @@
       "properties.desired": {
         "SendData": false,
         "SendInterval": 5
+      }
+    },
+    "ModbusModule": {
+      "properties.desired": {
+        "PublishInterval": 5000,
+        "Version": "2",
+        "SlaveConfigs": {
+          "Slave01": {
+            "SlaveConnection": "172.200.71.51",
+            "HwId": "device modbus",
+            "TcpPort": "10502",
+            "RetryCount": "10",
+            "RetryInterval": "50",
+            "Operations": {
+              "Op01": {
+                "PollingInterval": "5000",
+                "UnitId": "1",
+                "StartAddress": "400002",
+                "Count": "1",
+                "DisplayName": "Temperature"
+              },
+              "Op02": {
+                "PollingInterval": "5000",
+                "UnitId": "2",
+                "StartAddress": "400001",
+                "Count": "1",
+                "DisplayName": "Pressure"
+              }
+            }
+          }
+        }
       }
     }
   }

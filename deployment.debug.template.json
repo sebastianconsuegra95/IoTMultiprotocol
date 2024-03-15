@@ -158,6 +158,16 @@
                 }
               }
             }
+          },
+          "ModbusModule": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "mcr.microsoft.com/azureiotedge/modbus:latest",
+              "createOptions": {}
+            }
           }
         }
       }
@@ -170,7 +180,8 @@
           "MQTTModuleToIoTHub": "FROM /messages/modules/MQTTModule/outputs/* INTO $upstream",
           "SimulatedTemperatureSensorToIoTHub": "FROM /messages/modules/SimulatedTemperatureSensor/* INTO $upstream",
           "TransformModuleToIoTHub": "FROM /messages/modules/TransformModule/outputs/* INTO $upstream",
-          "StandardModuleToIoTHub": "FROM /messages/modules/StandardModule/outputs/* INTO $upstream"
+          "StandardModuleToIoTHub": "FROM /messages/modules/StandardModule/outputs/* INTO $upstream",
+          "modbusToIoTHub": "FROM /messages/modules/Modbus/outputs/modbusOutput INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
@@ -181,6 +192,26 @@
       "properties.desired": {
         "SendData": true,
         "SendInterval": 5
+      }
+    },
+    "ModbusModule": {
+      "properties.desired": {
+        "PublishInterval": 2000,
+        "SlaveConfigs": {
+          "Slave01": {
+            "SlaveConnection": "<IPV4 address>",
+            "HwId": "PowerMeter-0a:01:01:01:01:01",
+            "Operations": {
+              "Op01": {
+                "PollingInterval": "1000",
+                "UnitId": "1",
+                "StartAddress": "400001",
+                "Count": "2",
+                "DisplayName": "Voltage"
+              }
+            }
+          }
+        }
       }
     }
   }
