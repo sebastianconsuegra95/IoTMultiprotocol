@@ -6,6 +6,7 @@ import asyncio
 import sys
 import signal
 import threading
+import json
 from azure.iot.device.aio import IoTHubModuleClient
 
 
@@ -29,11 +30,28 @@ def create_client():
 
 
             
-            # Logica del modulo de estandarización
+            #Convertir en un objeto python (diccionario)
+            dict_json_entrada = json.loads(message.data)
+            print(dict_json_entrada)
+            
+            #Hacer diccionario con estrutura JSON deseada
+            dict_json_salida={
+                "device": dict_json_entrada["device"],
+                "humedad": dict_json_entrada["data"]["humedad"],
+                "vibracion": dict_json_entrada["data"]["vibracion"]
+            }
+            print(dict_json_salida)
+            
+            #Convertir a un JSON
+            #ident->nivel de identación
+            json_salida = json.dumps(dict_json_salida, indent=2)
+            
+            #Imprimir JSON
+            print(json_salida)
 
 
 
-            await client.send_message_to_output(message, "output1")
+            await client.send_message_to_output(json_salida, "output1")
 
     try:
         # Set handler on the client
