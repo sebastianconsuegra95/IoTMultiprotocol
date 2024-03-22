@@ -6,6 +6,7 @@ import asyncio
 import sys
 import signal
 import threading
+from formats import modbusFormat, mqttFormat
 import json
 from azure.iot.device.aio import IoTHubModuleClient
 
@@ -21,37 +22,23 @@ def create_client():
     async def receive_message_handler(message):
         # NOTE: This function only handles messages sent to "input1".
         # Messages sent to other inputs, or to the default, will be discarded
-        if message.input_name == "input1":
-            print("the data in the message received on input1 was ")
-            print(message.data)
-            print("custom properties are")
-            print(message.custom_properties)
+        if message.input_name == "mqttInput":
+            print("the data in the message received on Mqtt Module was ")
+            print(json.dumps(json.loads(message.data), indent=2))
+            print("the new data format is")
+            formattedOutput = mqttFormat.format(message)
+            print(formattedOutput)
             print("forwarding mesage to output1")
+            await client.send_message_to_output(formattedOutput, "output1")
 
-
-            
-            #Convertir en un objeto python (diccionario)
-            dict_json_entrada = json.loads(message.data)
-            print(dict_json_entrada)
-            
-            #Hacer diccionario con estrutura JSON deseada
-            dict_json_salida={
-                "device": dict_json_entrada["device"],
-                "humedad": dict_json_entrada["data"]["humedad"],
-                "vibracion": dict_json_entrada["data"]["vibracion"]
-            }
-            print(dict_json_salida)
-            
-            #Convertir a un JSON
-            #ident->nivel de identación
-            json_salida = json.dumps(dict_json_salida, indent=2)
-            
-            #Imprimir JSON
-            print(json_salida)
-
-
-
-            await client.send_message_to_output(json_salida, "output1")
+        if message.input_name == "modbusInput":
+            print("the data in the message received on Mqtt Module was ")
+            print(json.dumps(json.loads(message.data)))
+            print("the new data format is")
+            formattedOutput = modbusFormat.format(message)
+            print(formattedOutput)
+            print("forwarding mesage to output1")
+            await client.send_message_to_output(formattedOutput, "output1")
 
     try:
         # Set handler on the client
@@ -73,15 +60,18 @@ async def run_sample(client):
 
 def main():
     if not sys.version >= "3.5.3":
-        raise Exception( "The sample requires python 3.5.3+. Current version of Python: %s" % sys.version )
-    print ( "IoT Hub Client for Python" )
+        raise Exception(
+            "The sample requires python 3.5.3+. Current version of Python: %s"
+            % sys.version
+        )
+    print("IoT Hub Client for Python")
 
     # NOTE: Client is implicitly connected due to the handler being set on it
     client = create_client()
 
     # Define a handler to cleanup when module is is terminated by Edge
     def module_termination_handler(signal, frame):
-        print ("IoTHubClient sample stopped by Edge")
+        print("IoTHubClient sample stopped by Edge")
         stop_event.set()
 
     # Set the Edge termination handler
