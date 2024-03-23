@@ -5,7 +5,7 @@ var Client = require('azure-iot-device').ModuleClient;
 var Message = require('azure-iot-device').Message;
 var Mqtt = require('mqtt');
 
-var ClientMqtt = Mqtt.connect('http://' + process.env.brokerIpAdress + ':1881');
+var ClientMqtt = Mqtt.connect('http://' + process.env.brokerIpAddress + ':1881');
 var MQTT_Topics = process.env.topics.split(",")
 
 ClientMqtt.on('connect', function () {
@@ -25,12 +25,27 @@ ClientMqtt.on('message', (topic, payload) => {
         throw err;
       });
 
+      client.getTwin(function (err, twin) {
+        if (err) {
+          console.error('Error getting twin: ' + err.message);
+        } else {
+          twin.on('properties.desired', function (obj) {
+            console.log(obj)
+            var brokerMqtt = obj.brokerMqtt
+            var topicsMqtt = obj.topics
+            //mqttConnect(Mqtt, brokerMqtt, topicsMqtt)
+          });
+        }
+      })
+
       // connect to the Edge instance
       client.open(function (err) {
         if (err) {
           throw err;
         } else {
           var message = payload.toString('utf8')
+          console.log(`Message recieved from topic ${topic} :`)
+          console.log(message)
           var outputMsg = new Message(message)
           client.sendOutputEvent('output1', outputMsg, printResultFor('Sending received message to output1'))
         }
