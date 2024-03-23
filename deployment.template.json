@@ -80,7 +80,7 @@
               "createOptions": {}
             },
             "env": {
-              "brokerIpAdress": {
+              "brokerIpAddress": {
                 "value": "172.200.71.51"
               },
               "topics": {
@@ -140,6 +140,12 @@
       "properties.desired": {
         "SendData": false,
         "SendInterval": 5
+      }
+    },
+    "MQTTModule": {
+      "properties.desired": {
+        "brokerIpAddress": "172.200.71.51",
+        "topics": "micasa/mqtt/data"
       }
     },
     "ModbusModule": {
