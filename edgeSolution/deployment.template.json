@@ -81,7 +81,7 @@
             },
             "env": {
               "brokerIpAddress": {
-                "value": "172.200.71.51"
+                "value": "brokermosquitto.eastus2.azurecontainer.io"
               },
               "topics": {
                 "value": "micasa/mqtt/data"
