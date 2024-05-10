@@ -4,6 +4,10 @@ metadata:
   name: iot-multiprotocol-example
   annotations:
     github.com/project-slug: sebastianconsuegra95/IoTMultiprotocol
+  links:
+    - url: https://dashboard.example.com
+      title: My Dashboard
+      icon: dashboard
 spec:
   type: other
   lifecycle: Dev
