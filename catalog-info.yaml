@@ -1,22 +1,10 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: artist-web
-  description: The place to be, for great artists
-  labels:
-    example.com/custom: custom_label_value
+  name: iot-multiprotocol
   annotations:
-    example.com/service-discovery: artistweb
-    circleci.com/project-slug: github/example-org/artist-website
-  tags:
-    - java
-  links:
-    - url: https://admin.example-org.com
-      title: Admin Dashboard
-      icon: dashboard
-      type: admin-dashboard
+    github.com/project-slug: sebastianconsuegra95/IoTMultiprotocol
 spec:
-  type: website
-  lifecycle: production
-  owner: artist-relations-team
-  system: public-websites
+  type: other
+  lifecycle: unknown
+  owner: digital-twins-cell
